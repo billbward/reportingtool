@@ -1,0 +1,709 @@
+<?php
+session_start();
+    $myc_id = $_SESSION['vanid'];
+    $key = $_SESSION['key'];
+    $staging_location = $_SESSION['sl']; 
+
+//session_write_close();
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>SL Report - Error</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap_bill.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="css/plugins/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="font-awesome-4.1.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+    a:hover {
+        text-decoration: none;
+    }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="report-panel panel panel-default">
+                    <div class="panel-heading" style="text-align:center;">
+                        <h3 class="panel-title"><strong>One Moment...</strong>      </h3>
+                        
+                    </div>
+                    <div class="panel-body">
+                        <h4 style="text-align:center;">We're beaming your info to Wendy HQ in Fort Worth. Sit tight!</h4>
+                        <form role="form" id="error_form" method="post" action="report_open.php">
+                            <fieldset>
+
+                            <?php
+
+
+                                $key_check = $myc_id . time(); 
+                                $key_valid = $key + 1200;
+  
+
+
+                                if  ($key_check > $key_valid) {
+                                                    $url = "login.php";
+
+                                                function redirect($url)
+                                                {
+                                                    if (!headers_sent())
+                                                    {    
+                                                        header("'Location: ".$url."'");
+                                                        exit;
+                                                        }
+                                                    else
+                                                        {  
+                                                        echo '<script type="text/javascript">';
+                                                        echo 'window.location.href="'.$url.'";';
+                                                        echo '</script>';
+                                                        echo '<noscript>';
+                                                        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+                                                        echo '</noscript>'; exit;
+                                                    }
+                                                }
+
+                                                redirect($url);
+                                                } 
+
+                                else {
+
+                                $db = mysqli_connect("23.229.203.8", "bward", "gtown11.", "master_db")
+                                                or die("Can't connect to database".mysql_error());
+
+                                $required = array("sl", "vols_phoning_snapshot", "walk_pckts_out", "canv_shifts_completed", "phone_shifts_completed",
+                                                    "canv_att_completed", "phone_att_completed", "walk_pckts_completed", "walk_pckts_unatt", "ctv_collected", "lit_count");
+
+                                function isset_or(&$check, $alternate = NULL) 
+                                { 
+                                    return (isset($check)) ? $check : $alternate; 
+                                } 
+
+                                //$staging_location = mysqli_real_escape_string($db, isset_or($_POST['sl'], NULL));
+                                session_start();
+                                $staging_location = $_SESSION['sl']; 
+                                session_write_close();
+                                //$vols_knocking_snapshot = mysqli_real_escape_string($db, isset_or($_POST['vols_knocking_snapshot'], NULL));
+                                $vols_phoning_snapshot = mysqli_real_escape_string($db, isset_or($_POST['vols_phoning_snapshot'], NULL));
+                                $walk_pckts_out = mysqli_real_escape_string($db, isset_or($_POST['walk_pckts_out'], NULL));
+                                $vols_knocking_snapshot = mysqli_real_escape_string($db, isset_or($_POST['vols_knocking_snapshot'], NULL));
+                                $vols_returned_snapshot = mysqli_real_escape_string($db, isset_or($_POST['vols_returned_snapshot'], NULL));
+                                //$phone_pckts_out = mysqli_real_escape_string($db, isset_or($_POST['phone_pckts_out'], NULL));
+                                $canv_shifts_completed = mysqli_real_escape_string($db, isset_or($_POST['canv_shifts_completed']));
+                                $phone_shifts_completed = mysqli_real_escape_string($db, isset_or($_POST['phone_shifts_completed']));
+                                $canv_att_completed = mysqli_real_escape_string($db, isset_or($_POST['canv_att_completed']));
+                                $phone_att_completed = mysqli_real_escape_string($db, isset_or($_POST['phone_att_completed']));
+                                //$walk_pckts_completed = mysqli_real_escape_string($db, isset_or($_POST['walk_pckts_completed'], NULL));
+                                $ctv_collected = mysqli_real_escape_string($db, isset_or($_POST['ctv_collected'], NULL));
+                                //$phone_pckts_completed = mysqli_real_escape_string($db, isset_or($_POST['phone_pckts_completed'], NULL));
+                                //$walk_pckts_data_entered = mysqli_real_escape_string($db, isset_or($_POST['walk_pckts_data_entered'], NULL));
+                                //$phone_pckts_data_entered = mysqli_real_escape_string($db, isset_or($_POST['phone_pckts_data_entered'], NULL));
+                                $walk_pckts_unatt = mysqli_real_escape_string($db, isset_or($_POST['walk_pckts_unatt'], NULL));
+                                //$phone_pckts_unatt = mysqli_real_escape_string($db, isset_or($_POST['phone_pckts_unatt'], NULL));
+                                //$lit_count = mysqli_real_escape_string($db, isset_or($_POST['lit_count'], NULL));
+
+
+                               /* if( $vols_knocking_snapshot == '0') {
+                                    $vols_knocking_snapshot = $vols_knocking_snapshot;
+                                }
+                                else if($vols_knocking_snapshot !== NULL) {
+                                    $vols_knocking_snapshot = (int) $vols_knocking_snapshot;
+                                } */
+
+                                if( $vols_phoning_snapshot == '0') {
+                                    $vols_phoning_snapshot = $vols_phoning_snapshot;
+                                }
+                                else if($vols_phoning_snapshot !== NULL) {
+                                    $vols_phoning_snapshot = (int) $vols_phoning_snapshot;
+                                }
+
+                                if( $vols_knocking_snapshot == '0') {
+                                    $vols_knocking_snapshot = $vols_knocking_snapshot;
+                                }
+                                else if($vols_knocking_snapshot !== NULL) {
+                                    $vols_knocking_snapshot = (int) $vols_knocking_snapshot;
+                                }
+
+                                if( $vols_returned_snapshot == '0') {
+                                    $vols_returned_snapshot = $vols_returned_snapshot;
+                                }
+                                else if($vols_returned_snapshot !== NULL) {
+                                    $vols_returned_snapshot = (int) $vols_returned_snapshot;
+                                }
+
+                                if( $walk_pckts_out == '0') {
+                                    $walk_pckts_out = $walk_pckts_out;
+                                }
+                                else if($walk_pckts_out !== NULL) {
+                                    $walk_pckts_out = (int) $walk_pckts_out;
+                                }
+
+                               /* if( $phone_pckts_out == '0') {
+                                    $phone_pckts_out = $phone_pckts_out;
+                                }
+                                else if($phone_pckts_out !== NULL) {
+                                    $phone_pckts_out = (int) $phone_pckts_out;
+                                } */
+
+                                if( $canv_shifts_completed == '0') {
+                                    $canv_shifts_completed = $canv_shifts_completed;
+                                }
+                                else if($canv_shifts_completed !== NULL) {
+                                    $canv_shifts_completed = (int) $canv_shifts_completed;
+                                }
+
+                                if( $phone_shifts_completed == '0') {
+                                    $phone_shifts_completed = $phone_shifts_completed;
+                                }
+                                else if($phone_shifts_completed !== NULL) {
+                                    $phone_shifts_completed = (int) $phone_shifts_completed;
+                                }
+
+                                if( $canv_att_completed == '0') {
+                                    $canv_att_completed = $canv_att_completed;
+                                }
+                                else if($canv_att_completed !== NULL) {
+                                    $canv_att_completed = (int) $canv_att_completed;
+                                }
+
+                                if( $phone_att_completed == '0') {
+                                    $phone_att_completed = $phone_att_completed;
+                                }
+                                else if($phone_att_completed !== NULL) {
+                                    $phone_att_completed = (int) $phone_att_completed;
+                                }
+
+                              /*  if( $walk_pckts_completed == '0') {
+                                    $walk_pckts_completed = $walk_pckts_completed;
+                                }
+                                else if($walk_pckts_completed !== NULL) {
+                                    $walk_pckts_completed = (int) $walk_pckts_completed;
+                                }
+
+                               /*  if( $phone_pckts_completed == '0') {
+                                    $phone_pckts_completed = $phone_pckts_completed;
+                                }
+                                else if($phone_pckts_completed !== NULL) {
+                                    $phone_pckts_completed = (int) $phone_pckts_completed;
+                                }
+
+                                if( $walk_pckts_data_entered == '0') {
+                                    $walk_pckts_data_entered = $walk_pckts_data_entered;
+                                }
+                                else if($walk_pckts_data_entered !== NULL) {
+                                    $walk_pckts_data_entered = (int) $walk_pckts_data_entered;
+                                }
+
+                                if( $phone_pckts_data_entered == '0') {
+                                    $phone_pckts_data_entered = $phone_pckts_data_entered;
+                                }
+                                else if($phone_pckts_data_entered !== NULL) {
+                                    $phone_pckts_data_entered = (int) $phone_pckts_data_entered;
+                                } */
+
+                                if( $walk_pckts_unatt == '0') {
+                                    $walk_pckts_unatt = $walk_pckts_unatt;
+                                }
+                                else if($walk_pckts_unatt !== NULL) {
+                                    $walk_pckts_unatt = (int) $walk_pckts_unatt;
+                                }
+
+                               /* if( $phone_pckts_unatt == '0') {
+                                    $phone_pckts_unatt = $phone_pckts_unatt;
+                                }
+                                else if($phone_pckts_unatt !== NULL) {
+                                    $phone_pckts_unatt = (int) $phone_pckts_unatt;
+                                } */
+
+                                if( $ctv_collected == '0') {
+                                    $ctv_collected = $ctv_collected;
+                                }
+                                else if($ctv_collected !== NULL) {
+                                    $ctv_collected = (int) $ctv_collected;
+                                }
+
+                              /*  if( $lit_count == '0') {
+                                    $lit_count = $lit_count;
+                                }
+                                else if($lit_count !== NULL) {
+                                    $lit_count = (int) $lit_count;
+                                } */
+
+                                $error = "";
+                                $error_sl = "";
+                                //$error_vks = "";
+                                $error_vps = "";
+                                $error_vks = "";
+                                $error_vrs = "";
+                                $error_wpo = "";
+                                //$error_ppo = "";
+                                $error_csc = "";
+                                $error_psc = "";
+                                $error_cac = "";
+                                $error_pac = "";
+                                //$error_wpc = "";
+                                $error_ctv = "";
+                                //$error_ppc = "";
+                                //$error_wpd = "";
+                                //$error_ppd = "";
+                                $error_wpu = "";
+                                //$error_ppu = "";
+                                //$error_lc = "";
+
+                                //$error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+
+
+                                if($staging_location == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_sl = "<p><strong>Staging Location: </strong><em>Any chance you forgot to select your Staging Location?</em></p>";
+                                }
+
+                               /* if($vols_knocking_snapshot == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vks = "<p><em>Did you tell us how many volunteers are currently out knocking? Make sure you entered a whole number (if no one is out right now, just put in 0)!</em></p>" ;
+                                } */
+
+                                if($walk_pckts_out == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpo = "<p><strong>Walk Packets Out: </strong><em>Make sure you entered this one. If none are out, use \"0\"</em></p>";
+                                }
+                                elseif($walk_pckts_out == 0) {
+                                }
+                                elseif(!is_int($walk_pckts_out)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpo = "<p><strong>Walk Packets Out: </strong><em>Make sure you entered this one. If none are out, use \"0\"</em></p>";
+                                }
+                                elseif($walk_pckts_out < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpo = "<p><strong>Walk Packets Out: </strong><em>Make sure you entered this one. If none are out, use \"0\"</em></p>";
+                                }
+
+
+
+
+
+                                if($vols_phoning_snapshot == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vps = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter the # of vols making calls? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_phoning_snapshot == 0) {
+                                }
+                                elseif(!is_int($vols_phoning_snapshot)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vps = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter the # of vols making calls? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_phoning_snapshot < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vps = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter the # of vols making calls? If none, use \"0\"</em></p>";
+                                }
+
+
+                                if($vols_knocking_snapshot == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vks = "<p><strong>Canvassers Out: </strong><em>Did you enter how many are out knocking? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_knocking_snapshot == 0) {
+                                }
+                                elseif(!is_int($vols_knocking_snapshot)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vks = "<p><strong>Canvassers Out: </strong><em>Did you enter how many are out knocking? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_knocking_snapshot < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vks = "<p><strong>Canvassers Out: </strong><em>Did you enter how many are out knocking? If none, use \"0\"</em></p>";
+                                }
+
+
+                                if($vols_returned_snapshot == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vrs = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter how many volunteers are back from the last shift? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_returned_snapshot == 0) {
+                                }
+                                elseif(!is_int($vols_returned_snapshot)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vrs = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter how many volunteers are back from the last shift? If none, use \"0\"</em></p>";
+                                }
+                                elseif($vols_returned_snapshot < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_vrs = "<p><strong>Volunteers Making Calls: </strong><em>Did you enter how many volunteers are back from the last shift? If none, use \"0\"</em></p>";
+                                }
+
+
+
+
+
+                                /*else if ($canv_shifts_sched_today !== '0') {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_csi = "<p><em>Did you enter a number for the number of canvass shifts scheduled? Please make sure you've entered a whole number (or zero)!</em></p>";
+                                }*/
+
+                                
+                                /*else if ($phone_shifts_sched_today !== '0') {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_psi = "<p><em>Make sure you entered a real number for the number of phonebank shifts you've got scheduled today.</em></p>";
+                                }*/
+
+                                /*if($phone_pckts_out == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ppo = "<p><em>Did you input the number of phone packets that are currently being dialed? Make sure you entered a real number (if no one is dialing a packet right now, just enter 0).</em></p>";
+                                }
+                                /*else if ($walk_pckts_unatt !== '0') {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpi = "<p><em>The number of unattempted walk packets available needs to be a number. Did you enter a number?</em></p>";
+                                }*/
+
+                                if($canv_shifts_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_csc = "<p><strong>Canvass Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+                                elseif($canv_shifts_completed == 0) {
+                                }
+                                elseif(!is_int($canv_shifts_completed)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_csc = "<p><strong>Canvass Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+                                elseif($canv_shifts_completed < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_csc = "<p><strong>Canvass Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+                                /*else if ($phone_pckts_unatt !== '0') {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ppi = "<p><em>Was your entry for unattempted phone packets available a number? Please head back and make sure it is!</em></p>";
+                                }*/
+
+                                if($phone_shifts_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_psc = "<p><strong>Phone Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+                                elseif($phone_shifts_completed == 0){
+                                }
+                                elseif(!is_int($phone_shifts_completed)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_psc = "<p><strong>Phone Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+                                elseif($phone_shifts_completed < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_psc = "<p><strong>Phone Shifts Completed: </strong><em>Double check your entry. This should be a number.</em></p>";
+                                }
+
+
+
+                                if($canv_att_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_cac = "<p><strong>Canvass Attempts Completed: </strong><em>Did you enter the number of canvass attempts?</em></p>";
+                                }
+                                elseif($canv_att_completed == 0) {
+                                }
+                                elseif(!is_int($canv_att_completed)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_cac = "<p><strong>Canvass Attempts Completed: </strong><em>Did you enter the number of canvass attempts?</em></p>";
+                                }
+                                elseif($canv_att_completed <0 ) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_cac = "<p><strong>Canvass Attempts Completed: </strong><em>Did you enter the number of canvass attempts?</em></p>";
+                                }
+
+
+                                if($phone_att_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_pac = "<p><strong>Phone Attempts Completed: </strong><em>Did you enter the number of phone attempts?</em></p>";
+                                }
+                                elseif($phone_att_completed == 0) {
+                                }
+                                elseif(!is_int($phone_att_completed)){
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_pac = "<p><strong>Phone Attempts Completed: </strong><em>Did you enter the number of phone attempts?</em></p>";
+                                }
+                                elseif($phone_att_completed < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_pac = "<p><strong>Phone Attempts Completed: </strong><em>Did you enter the number of phone attempts?</em></p>";
+                                }
+
+
+                            /*    if($walk_pckts_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpc = "<p><strong>Walk Packets Completed: </strong><em>Double check - did you enter a number (0 works)?</em></p>";
+                                }
+                                elseif($walk_pckts_completed == 0) {
+                                }
+                                elseif(!is_int($walk_pckts_completed)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpc = "<p><strong>Walk Packets Completed: </strong><em>Double check - did you enter a number (0 works)?</em></p>";
+                                }
+                                elseif($walk_pckts_completed < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpc = "<p><strong>Walk Packets Completed: </strong><em>Double check - did you enter a number (0 works)?</em></p>";
+                                }
+                                    */
+
+                                if($ctv_collected == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ctv = "<p><strong>CTV Cards Collected: </strong><em>Make sure you entered these. Must be a number (or 0).</em></p>";
+                                }
+                                elseif($ctv_collected == 0) {
+                                }
+                                elseif(!is_int($ctv_collected)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ctv = "<p><strong>CTV Cards Collected: </strong><em>Make sure you entered these. Must be a number (or 0).</em></p>";
+                                }
+                                elseif($ctv_collected < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ctv = "<p><strong>CTV Cards Collected: </strong><em>Make sure you entered these. Must be a number (or 0).</em></p>";
+                                }
+
+
+                             /*   if($phone_pckts_completed == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ppc = "<p><em>Did you forget to enter the number of phone packets completed so far today? Make sure you've entered a number (and if none have been completed, enter 0)!</em></p>";
+                                } */
+
+                             /*   if($walk_pckts_data_entered == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpd = "<p><em>Did you forget to enter the number of walk packets that have been data entered so far today? Make sure you've entered a number and if none have been entered (or none have been completed), use 0.</em></p>";
+                                }
+
+                             /*   if($phone_pckts_data_entered == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ppd = "<p><em>Did you forget to enter the number of phone packets that have been data entered so far today? Make sure you've entered a number and if none have been entered (or none have been completed), use 0.</em></p>";
+                                } */
+
+                                if($walk_pckts_unatt == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpu = "<p><strong>Walk Packets Available: </strong><em>Double check you entered a whole number (zero works)!</em></p>";
+                                }
+                                elseif($walk_pckts_unatt == 0) {
+                                }
+                                elseif(!is_int($walk_pckts_unatt)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpu = "<p><strong>Walk Packets Available: </strong><em>Double check you entered a whole number (zero works)!</em></p>";
+                                }
+                                elseif($walk_pckts_unatt < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_wpu = "<p><strong>Walk Packets Available: </strong><em>Double check you entered a whole number (zero works)!</em></p>";
+                                }
+
+
+                               /* if($phone_pckts_unatt == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_ppu = "<p><em>Might you have forgotten to include how many unattempted phone packets you have available? Make sure you've entered a number!</em></p>";
+                                }*/
+
+                            /*    if($lit_count == NULL) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_lc = "<p><strong>Lit Count: </strong><em>You can give an estimate for this, just let us know how much you have. We don't want you to run out!</em></p>";
+                                }
+                                elseif($lit_count == 0) {
+                                }
+                                elseif(!is_int($lit_count)) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_lc = "<p><strong>Lit Count: </strong><em>You can give an estimate for this, just let us know how much you have. We don't want you to run out!</em></p>";
+                                }
+                                elseif($lit_count < 0) {
+                                    $error = "<p><h4>Hm, that entry looks just a little funky.</h4></p>";
+                                    $error_lc = "<p><strong>Lit Count: </strong><em>You can give an estimate for this, just let us know how much you have. We don't want you to run out!</em></p>";
+                                }
+                            */
+
+                                if($error == "") {
+
+                                /*  echo "<form method=\"post\" action=\"http://localhost/soft_reporting_project/form_test_one/insert.php\">";
+                                    echo "<input type=\"hidden\" name=\"staging_location\" value='" . $staging_location . "'>";
+                                    echo "<input type=\"hidden\" name=\"open_status\" value='" . $open_status . "'>";
+                                    echo "<input type=\"hidden\" name=\"canv_shifts_sched_today\" value='" . $canv_shifts_sched_today . "'>";
+                                    echo "<input type=\"hidden\" name=\"phone_shifts_sched_today\" value='" . $phone_shifts_sched_today . "'>";
+                                    echo "<input type=\"hidden\" name=\"walk_pckts_unatt\" value='" . $walk_pckts_unatt . "'>";
+                                    echo "<input type=\"hidden\" name=\"phone_pckts_unatt\" value='" . $phone_pckts_unatt . "'>";
+                                    echo "<input type=\"hidden\" name=\"lit_count\" value='" . $lit_count . "''>";
+                                */
+
+                                //session_start();
+
+                                $_SESSION["staging_location"] = $staging_location;
+                                //$_SESSION["vols_knocking_snapshot"] = $vols_knocking_snapshot;
+                                $_SESSION["vols_phoning_snapshot"] = $vols_phoning_snapshot;
+                                $_SESSION["vols_knocking_snapshot"] = $vols_phoning_snapshot;
+                                $_SESSION["vols_returned_snapshot"] = $vols_phoning_snapshot;
+                                $_SESSION["walk_pckts_out"] = $walk_pckts_out;
+                                //$_SESSION["phone_pckts_out"] = $phone_pckts_out;
+                                $_SESSION["canv_shifts_completed"] = $canv_shifts_completed;
+                                $_SESSION["phone_shifts_completed"] = $phone_shifts_completed;
+                                $_SESSION["canv_att_completed"] = $canv_att_completed;
+                                $_SESSION["phone_att_completed"] = $phone_att_completed;
+                                //$_SESSION["walk_pckts_completed"] = $walk_pckts_completed;
+                                $_SESSION["ctv_collected"] = $ctv_collected;
+                                //$_SESSION["phone_pckts_completed"] = $phone_pckts_completed;
+                                //$_SESSION["walk_pckts_data_entered"] = $walk_pckts_data_entered;
+                                //$_SESSION["phone_pckts_data_entered"] = $phone_pckts_data_entered;
+                                $_SESSION["walk_pckts_unatt"] = $walk_pckts_unatt;
+                                //$_SESSION["phone_pckts_unatt"] = $phone_pckts_unatt;
+                                //$_SESSION["lit_count"] = $lit_count;
+                                //session_write_close();
+
+
+                                    /*echo "<form method=\"post\" action=\"http://localhost/soft_reporting_project/form_test_one/insert.php\">";
+                                    echo "<input type=\"hidden\" name=\"staging_location\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"open_status\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"canv_shifts_sched_today\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"phone_shifts_sched_today\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"walk_pckts_unatt\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"phone_pckts_unatt\" value=\"\">";
+                                    echo "<input type=\"hidden\" name=\"lit_count\" value=\"\">";
+                                    echo "<input type=\"submit\">";
+                                    echo "</form>";
+                                    */
+
+
+                                    //header("Location:result_intraday.php");
+                                    $url = "result_intraday.php";
+
+                                                function redirect($url)
+                                                {
+                                                    if (!headers_sent())
+                                                    {    
+                                                        header("'Location: ".$url."'");
+                                                        exit;
+                                                        }
+                                                    else
+                                                        {  
+                                                        echo '<script type="text/javascript">';
+                                                        echo 'window.location.href="'.$url.'";';
+                                                        echo '</script>';
+                                                        echo '<noscript>';
+                                                        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+                                                        echo '</noscript>'; exit;
+                                                    }
+                                                }
+
+                                                redirect($url);
+                                }
+                                else {
+
+
+                                    if($error_os == '') {
+                                        $_SESSION['error_os'] = 1;
+
+                                    }
+                                    else {
+                                        $_SESSION['error_os'] = 0;
+                                    }
+ 
+
+                                    $_SESSION['error_sl'] = $error_sl;
+                                    $SESSION['error_vps'] = $error_vps;
+                                    $SESSION['error_vks'] = $error_vks;
+                                    $SESSION['error_vrs'] = $error_vrs;
+                                    $SESSION['error_wpo'] = $error_wpo;
+                                    $SESSION['error_csc'] = $error_csc;
+                                    $SESSION['error_psc'] = $error_psc;
+                                    $SESSION['error_cac'] = $error_cac;
+                                    $SESSION['error_pac'] = $error_pac;
+                                    $SESSION['error_ctv'] = $error_ctv;
+                                    $SESSION['error_wpu'] = $error_wpu;
+
+                                    $url = "report_intraday_error.php";
+
+                                                function redirect($url)
+                                                {
+                                                    if (!headers_sent())
+                                                    {    
+                                                        header("'Location: ".$url."'");
+                                                        exit;
+                                                        }
+                                                    else
+                                                        {  
+                                                        echo '<script type="text/javascript">';
+                                                        echo 'window.location.href="'.$url.'";';
+                                                        echo '</script>';
+                                                        echo '<noscript>';
+                                                        echo '<meta http-equiv="refresh" content="0;url='.$url.'" />';
+                                                        echo '</noscript>'; exit;
+                                                    }
+                                                }
+
+                                                redirect($url);
+
+                                /*    
+                                    echo "<hr>";
+                                    //echo $error;
+                                    echo $error_sl;
+                                    //echo $error_vks;
+                                    echo $error_wpo;                                    
+                                    echo $error_vps;
+
+                                    //echo $error_ppo;
+                                    echo $error_csc;
+                                    echo $error_psc;
+                                    echo $error_cac;
+                                    echo $error_pac;
+                                    echo $error_wpc;
+                                    echo $error_ctv;
+                                    //echo $error_ppc;
+                                    //echo $error_wpd;
+                                    //echo $error_ppd;
+                                    echo $error_wpu;
+                                    //echo $error_ppu;
+                                    echo $error_lc;
+
+                                    echo "<hr>";
+                                                                    
+                                    echo "<br><div style=\"text-align:center;\">";
+                                    echo "<strong>Give it another shot:</strong>";
+                                    echo "<p><a href=\"javascript:history.go(-1)\" style=\"color: #FFFFFF\"><button type=\"button\" class=\"btn btn-lg btn-primary btn-default\">Click Here</button></a></p>";
+                                    echo "<p>Thanks!</p>";
+
+                                } */
+                                    }
+                                    session_write_close();
+                                ?>
+
+                                </fieldset>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery Version 1.11.0 -->
+    <script src="js/jquery-1.11.0.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="js/plugins/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="js/sb-admin-2.js"></script>
+
+</body>
+
+</html>

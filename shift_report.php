@@ -118,7 +118,7 @@ if($role == 'FO') {
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="activity_report.php">BGTX Soft Reporting Tool</a>
+                <a class="navbar-brand" href="pass_to_home.php">BGTX Soft Reporting Tool</a>
             </div>
             <!-- /.navbar-header -->
 
@@ -131,6 +131,14 @@ if($role == 'FO') {
                         <i class="fa fa-navicon fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="pass_to_home.php">
+                                <div>
+                                    <i class="fa fa-check fa-fw"></i> Reporting Tool - Enter A Report
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
                         <li>
                             <a href="activity_report.php">
                                 <div>
@@ -146,14 +154,7 @@ if($role == 'FO') {
                                 </div>
                             </a>
                         </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="pass_to_home.php">
-                                <div>
-                                    <i class="fa fa-check fa-fw"></i> Reporting Tool - Enter A Report
-                                </div>
-                            </a>
-                        </li>
+                        
                     </ul>
                     <!-- /.dropdown-alerts -->
                 </li>
